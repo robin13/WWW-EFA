@@ -26,7 +26,9 @@ URI request extended with some useful methods
     my $location = WWW::EFA::Location->new();
     ...
 
-=head1 PARAMS/ACCESSORS
+=head1 ATTRIBUTES
+
+TODO: RCL 2012-01-22 Documentation
 
 =cut
 
@@ -61,12 +63,26 @@ has 'service' => (
     required  => 1,
     );
 
+=head1 METHODS
+
+=head2 url
+
+Returns $string
+
+Get the URL for the request.  Concatenation of base_url and service after common_params are set.
+
+=cut
 sub url {
     my $self = shift;
     $self->set_common_params();
     return $self->base_url . $self->service;
 }
 
+=head2 set_common_params
+
+Set common parameters for the request
+
+=cut
 sub set_common_params {
     my $self = shift;
     
@@ -82,6 +98,18 @@ sub set_common_params {
     }
 }
 
+=head2 add_location( $suffix, $location )
+
+Add a location to the request.
+
+e.g.
+
+  
+$request->add_location( 'origin', $location );
+
+$location is a L<WWW::EFA::Location> object
+
+=cut
 sub add_location {
     my $self = shift;
     my ( $suffix, $location ) = pos_validated_list(
@@ -107,7 +135,16 @@ sub add_location {
     }
 }
 
+=head2 set_argument( $key, $value )
 
+Set an argument for the request.
+
+e.g.
+
+  
+$request->set_argument( 'inclMOT_0', 'on' );
+
+=cut
 sub set_argument {
     my $self = shift;
     my ( $key, $value ) = pos_validated_list(
@@ -116,8 +153,18 @@ sub set_argument {
         { isa => 'Str' },
       );
     $self->arguments->{ $key } = $value;
-}    
+}
 
+=head2 del_argument( $key )
+
+Added an argument you didn't mean to?  Remove it here!
+
+e.g.
+
+  
+$request->del_argument( $key );
+
+=cut
 sub del_argument {
     my $self = shift;
     my ( $key ) = validated_list(
@@ -127,6 +174,13 @@ sub del_argument {
     delete( $self->arguments->{ $key } );
 }
 
+=head2 digest
+
+Returns $string
+
+Generate a sha256_hex digest of this request.
+
+=cut
 sub digest {
     my $self = shift;
     my $string = $self->url . "\n";
@@ -136,4 +190,5 @@ sub digest {
     }
     return sha256_hex( $string );
 }
+
 1;

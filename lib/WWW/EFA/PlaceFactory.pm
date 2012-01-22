@@ -3,18 +3,25 @@ use Moose;
 use WWW::EFA::Place;
 =head1 NAME
 
-A Factory for creating L<WWW::EFA::Place> objects.
+WWW::EFA::PlaceFactory - A Factory for creating L<WWW::EFA::Place> objects.
+
+=head1 VERSION
+
+    Version 0.01
+
+=cut
+
+our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
   my $factory = WWW::EFA::PlaceFactory->new();
 
-
-=cut
-
 =head1 METHODS
 
 =head2 place_from_itdOdvPlace
+
+Returns a L<WWW::EFA::Place> object
 
   my $place = $factory->place_from_itdOdvPlace( $itd_odv->findnodes( '/itdOdvPlace' ) );
 
@@ -25,8 +32,6 @@ Expects an XML::LibXML::Element of XML like this:
 <odvPlaceElem omc="9162000" placeID="1" value="9162000:1" span="0" type="remote" mainPlace="1">München</odvPlaceElem>
 <odvPlaceInput/>
 </itdOdvPlace>
-
-Returns a L<WWW::EFA::Place> object
 
 =cut
 sub place_from_itdOdvPlace {
@@ -47,7 +52,6 @@ sub place_from_itdOdvPlace {
         );
     return $place;
 }
-
 
 1;
 

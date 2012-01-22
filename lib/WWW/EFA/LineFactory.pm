@@ -1,9 +1,30 @@
 package WWW::EFA::LineFactory;
 use Moose;
-
 use WWW::EFA::Line;
 use WWW::EFA::Location;
 use YAML;
+
+=head1 NAME
+
+A Factory for creating L<WWW::EFA::Line> objects.
+
+=head1 VERSION
+
+    Version 0.01
+
+=cut
+
+our $VERSION = '0.01';
+
+=head1 SYNOPSIS
+
+  my $factory = WWW::EFA::LineFactory->new();
+
+=head1 ATTRIBUTES
+
+TODO: RCL 2012-01-22 Documentation
+
+=cut
 
 has 'mot_mapping' => ( is => 'ro', isa => 'HashRef', required => 1,
     default => sub {
@@ -50,23 +71,17 @@ has 'mot0_mapping' => ( is => 'ro', isa => 'HashRef', required => 1,
     }
 );
 
-=head1 NAME
-
-A Factory for creating L<WWW::EFA::Line> objects.
-
-=head1 SYNOPSIS
-
-  my $factory = WWW::EFA::LineFactory->new();
-
-=cut
 
 =head1 METHODS
 
 =head2 line_from_itdServingLine
 
+Returns a L<WWW::EFA::Line> object
+
   my $location = $factory->line_from_itdServingLine( $doc->findnodes( 'itdServingLine' ) );
 
 Expects an XML::LibXML::Element of XML like this:
+
   
 <itdServingLine selected="1" code="2" number="S1" symbol="S1" motType="1" realtime="0" direction="Ostbahnhof" valid="Fahrplan (2011)" compound="0" TTB="0" STT="0" ROP="0" type="unknown" spTr="" destID="5" stateless="mvv:01001: :H:s11" trainName="" index="1:0">
   <itdNoTrain name="S-Bahn"/>
@@ -74,11 +89,9 @@ Expects an XML::LibXML::Element of XML like this:
   <itdRouteDescText>Freising - Neufahrn - Hauptbahnhof - Ostbahnhof</itdRouteDescText>
   <itdOperator>
     <code>01</code>
-    <name>DB Regio AG</name>
+    <name>DB Regio AG </name>
   </itdOperator>
 </itdServingLine>
-
-Returns a L<WWW::EFA::Line> object
 
 =cut
 sub line_from_itdServingLine {
@@ -99,7 +112,7 @@ sub line_from_itdServingLine {
         $destination = WWW::EFA::Location->new( %location_params );
     }
 
-    my $label = $self->label_for_line(
+    my $label = $self->_label_for_line(
         mot             => $element->getAttribute( 'motType' ),
         name            => $element->getAttribute( 'number' ),
         name_long       => $element->getAttribute( 'number' ),
@@ -137,7 +150,7 @@ sub line_from_itdServingLine {
 #     long_name     => 'name',
 #     no_train_name => 'no_train_name,
 #     );
-sub label_for_line {
+sub _label_for_line {
     my $self = shift;
     my %params = @_;
     if( not $params{mot} ){
@@ -202,9 +215,6 @@ sub label_for_line {
 
     croak( "Cannot normalise mot: " . Dump( \%params ) );
 }
-
-
-
 
 1;
 

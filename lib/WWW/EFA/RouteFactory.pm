@@ -4,8 +4,29 @@ use WWW::EFA::Route;
 use WWW::EFA::PartialRoute;
 use WWW::EFA::DateFactory;
 use WWW::EFA::Stop;
-
 use Carp;
+
+=head1 NAME
+
+WWW::EFA::RouteFactory - A factory for creating L<WWW::EFA::Route> objects.
+
+=head1 VERSION
+
+    Version 0.02
+
+=cut
+
+our $VERSION = '0.02';
+
+=head1 SYNOPSIS
+
+  my $factory = WWW::EFA::RouteFactory->new();
+
+=head1 ATTRIBUTES
+
+TODO: RCL 2012-01-22 Documentation
+
+=cut
 
 has 'location_factory' => (
     is          => 'ro',
@@ -23,25 +44,18 @@ has 'date_factory' => (
     default     => sub{ WWW::EFA::DateFactory->new() },
     );
 
-=head1 NAME
-
-A factory for creating L<WWW::EFA::Route> objects.
-
-=head1 SYNOPSIS
-
-  my $factory = WWW::EFA::RouteFactory->new();
-
-=cut
 
 =head1 METHODS
 
 =head2 route_from_itdRoute
 
+Returns a L<WWW::EFA::Route> object
+
   my $route = $factory->route_from_itdRoute( $element );
 
 Expects an L<XML::LibXML::Element> of XML with this kind of XML:
 
-Returns a L<WWW::EFA::Route> object
+TODO: RCL 2012-01-22 Example XML
 
 =cut
 sub route_from_itdRoute {
@@ -80,7 +94,17 @@ sub route_from_itdRoute {
     return $route;
 }
 
+=head2 partial_from_itdPartialRoute
 
+Returns a L<WWW::EFA::PartialRoute> object
+
+  my $route = $factory->partial_from_itdPartialRoute( $part_element );
+
+Expects an L<XML::LibXML::Element> of XML with this kind of XML:
+
+TODO: RCL 2012-01-22 Example XML
+
+=cut
 sub partial_from_itdPartialRoute {
     my $self = shift;
     my $elem = shift;

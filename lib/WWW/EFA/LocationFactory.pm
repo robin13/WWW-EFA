@@ -3,36 +3,49 @@ use Moose;
 use WWW::EFA::Location;
 use WWW::EFA::Coordinates;
 use WWW::EFA::CoordinatesFactory;
-
 use Carp;
-
-has 'coord_factory' => ( is => 'ro', isa => 'WWW::EFA::CoordinatesFactory', lazy => 1,
-    default => sub{ WWW::EFA::CoordinatesFactory->new() },
-);
 
 =head1 NAME
 
-A Factory for creating L<WWW::EFA::Location> objects.
+WWW::EFA::LocationFactory - A Factory for creating L<WWW::EFA::Location> objects.
+
+=head1 VERSION
+
+    Version 0.01
+
+=cut
+
+our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
   my $factory = WWW::EFA::LocationFactory->new();
 
+=head1 ATTRIBUTES
+
+TODO: RCL 2012-01-22 Documentation
+
 =cut
+
+has 'coord_factory' => ( is => 'ro', isa => 'WWW::EFA::CoordinatesFactory', lazy => 1,
+    default => sub{ WWW::EFA::CoordinatesFactory->new() },
+);
+
 
 =head1 METHODS
 
 =head2 location_from_odvNameElem
 
+Returns a L<WWW::EFA::Location> object
+
   my $location = $factory->location_from_odvNameElem( $itd_odv->findnodes( 'odvNameElem' ) );
 
 Expects an XML::LibXML::Element of XML like this:
+
   
 <odvNameElem x="11534639.00000" y="48142484.00000" 
   mapName="WGS84" stopID="8" value="8:1" isTransferStop="0" 
   matchQuality="100000">Donnersbergerbrücke</odvNameElem>
-
-Returns a L<WWW::EFA::Location> object
 
 =cut
 sub location_from_odvNameElem {
@@ -97,11 +110,13 @@ sub location_from_itdOdvAssignedStop {
 
 =head2 location_from_coordInfoItem
 
+Returns a L<WWW::EFA::Location> object
+
   my $location = $factory->location_from_coordInfoItem( $itd_odv->findnodes( 'coordInfoItem' ) );
 
 Expects an XML::LibXML::Element of XML like this:
-  
 
+  
 <coordInfoItem type="STOP" id="64" name="Barthstraße" addName="" omc="9162000" 
     placeID="1" locality="München" gisLayer="SYS-STOP" gisID="64" 
     distance="190" stateless="64">
@@ -112,7 +127,7 @@ Expects an XML::LibXML::Element of XML like this:
   </itdPathCoordinates>
   <genAttrList>
     <genAttrElem>
-      <name>STOP_NAME_WITH_PLACE</name>
+      <name>STOP_NAME_WITH_PLACE </name>
       <value>Barthstraße</value>
     </genAttrElem>
     <genAttrElem>
@@ -121,8 +136,6 @@ Expects an XML::LibXML::Element of XML like this:
     </genAttrElem>
   </genAttrList>
 </coordInfoItem>
-
-Returns a L<WWW::EFA::Location> object
 
 =cut
 sub location_from_coordInfoItem {
@@ -158,16 +171,19 @@ sub location_from_coordInfoItem {
 
 =head2 location_from_itdPoint
 
+Returns a L<WWW::EFA::Location> object
+
   my $location = $factory->location_from_itdPoint( $doc->findnodes( 'itdPoint' ) );
 
 Expects an XML::LibXML::Element of XML like this:
-  
 
+  
 <itdPoint stopID="64" area="20" platform="18H19" name="Barthstraße" 
     nameWO="Barthstraße" platformName="" usage="departure"
     x="11529096.00000" y="48140348.00000" mapName="WGS84"
     omc="9162000" placeID="1" locality="München">
 </itdPoint>
+
 =cut
 sub location_from_itdPoint {
     my $self = shift;
@@ -194,7 +210,6 @@ sub location_from_itdPoint {
 
     return $location;
 }
-
 
 1;
 

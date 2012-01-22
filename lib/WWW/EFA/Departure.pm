@@ -26,8 +26,9 @@ Departure object acquired through an EFA interface
 
 =head1 ATTRIBUTES
 
-=cut
 # TODO: RCL 2011-11-06 Document attributes
+
+=cut
 
 has 'stop_id'           => ( is => 'ro', isa => 'Int',          );
 has 'time'              => ( is => 'ro', isa => 'Class::Date',  );
@@ -38,3 +39,11 @@ has 'platform_name'     => ( is => 'ro', isa => 'Str',          );
 has 'countdown'         => ( is => 'ro', isa => 'Int',          );
 
 1;
+
+=head1 COPYRIGHT
+
+Copyright 2011, Robin Clarke, Munich, Germany
+
+=head1 AUTHOR
+
+Robin Clarke <perl@robinclarke.net>

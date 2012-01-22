@@ -88,9 +88,19 @@ has 'routes' => (
     default     => sub{ [] },
     );
 
+=head1 METHODS
+
+=head2 add_route( $route )
+
+Add a L<WWW::EFA::Route> to the result
+
+=cut
 sub add_route {
     my $self = shift;
-    my $route = shift;
+    my ( $route ) = pos_validated_list(
+        \@_,
+        { isa => 'WWW::EFA::Route' },
+    );
     my @routes = @{ $self->routes };
     push( @routes, $route );
     @routes = sort{ $a->departure_time <=> $b->departure_time } @routes;

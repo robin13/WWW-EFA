@@ -1,18 +1,35 @@
 package WWW::EFA::Place;
 use Moose;
+with 'WWW::EFA::Roles::Printable'; # provides string
+
 =head1 NAME
 
 WWW::EFA::Place - A Place
 
 =head1 DESCRIPTION
 
-Built from an XML like this:
+A Place object
 
-  
-<itdOdvPlace state="identified" method="itp">
-<odvPlaceElem omc="9162000" placeID="1" value="9162000:1" span="0" type="remote" mainPlace="1">München</odvPlaceElem>
-<odvPlaceInput/>
-</itdOdvPlace>
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+our $VERSION = '0.01';
+
+=head1 SYNOPSIS
+
+Location object acquired through an EFA interface
+
+    use WWW::EFA::Location;
+
+    my $location = WWW::EFA::Location->new();
+    ...
+
+=head1 ATTRIBUTES
+
+# TODO: RCL 2011-11-06 Document attributes
 
 =cut
 
@@ -22,19 +39,6 @@ has 'type'      => ( is => 'ro', isa => 'Str'               );
 has 'name'      => ( is => 'ro', isa => 'Str'               );
 
 1;
-
-=head1 NAME
-
-
-=head1 DESCRIPTION
-
-
-=head1 METHODS
-
-=over 4
-
-
-=back
 
 =head1 COPYRIGHT
 

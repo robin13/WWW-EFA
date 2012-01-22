@@ -3,33 +3,39 @@ use Moose;
 use WWW::EFA::ResultHeader;
 use Carp;
 
-
 =head1 NAME
 
-A (very small) Factory for creating L<WWW::EFA::ResultHeader> objects.
+WWW::EFA::HeaderFactory - A (very small) Factory for creating L<WWW::EFA::ResultHeader> objects.
+
+=head1 VERSION
+
+    Version 0.01
+
+=cut
+
+our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
   my $factory = WWW::EFA::HeaderFactory->new();
 
-=cut
-
 =head1 METHODS
 
 =head2 header_from_result
+
+Returns a L<WWW::EFA::ResultHeader> object
 
   my $location = $factory->header_from_result( $doc );
 
 Expects an XML::LibXML::Element of XML with this as its root element:
 
+  
 <itdRequest version="9.16.27.42" language="de" lengthUnit="METER" 
     sessionID="MVV1_4147296033" client="libwww-perl/6.03" 
     clientIP="192.168.0.190" serverID="MVV1_" virtDir="mobile" 
     now="2011-11-10T15:16:22" nowWD="5">
   ...
 </itdRequest>
-
-Returns a L<WWW::EFA::ResultHeader> object
 
 =cut
 sub header_from_result {

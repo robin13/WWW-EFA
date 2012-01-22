@@ -17,9 +17,16 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-# TODO: RCL 2011-08-23 Complete
+Station object acquired through an EFA interface
 
-=head1 PARAMS/ACCESSORS
+    use WWW::EFA::Station;
+
+    my $station = WWW::EFA::Station->new();
+    ...
+
+=head1 ATTRIBUTES
+
+# TODO: RCL 2011-11-06 Document attributes
 
 =cut
 
@@ -42,3 +49,11 @@ has 'lines' => (
     );
 
 1;
+
+=head1 COPYRIGHT
+
+Copyright 2011, Robin Clarke, Munich, Germany
+
+=head1 AUTHOR
+
+Robin Clarke <perl@robinclarke.net>

@@ -3,14 +3,6 @@ use Moose;
 use MooseX::Params::Validate;
 use Moose::Util::TypeConstraints;
 use Carp;
-
-with 'WWW::EFA::Roles::Printable'; # provides to_string
-
-subtype 'ValidDepartureStatus',
-      as 'Str',
-      where { $_ =~ m/^(OK|INVALID_STATION|SERVICE_DOWN)$/  },
-      message { "Invalid departure status" };
-
 =head1 NAME
 
 WWW::EFA::DeparturesResult - Store the results from a departures query
@@ -23,12 +15,22 @@ Version 0.01
 
 our $VERSION = '0.01';
 
-
 =head1 SYNOPSIS
 
-# TODO: RCL 2011-08-23 Complete
+TODO: RCL 2012-01-22 Documentation 
 
-=head1 PARAMS/ACCESSORS
+=cut
+
+with 'WWW::EFA::Roles::Printable'; # provides string
+
+subtype 'ValidDepartureStatus',
+      as 'Str',
+      where { $_ =~ m/^(OK|INVALID_STATION|SERVICE_DOWN)$/  },
+      message { "Invalid departure status" };
+
+=head1 ATTRIBUTES
+
+TODO: RCL 2012-01-22 Documentation
 
 =cut
 
@@ -56,6 +58,21 @@ has 'lines' => (
     default     => sub{ {} },
     );
 
+=head1 METHODS
+
+=head2 add_departure_station
+
+=head3 Params
+
+=over 4
+
+=item L<WWW::EFA::Station>
+
+=back
+
+Add a single L<WWW::EFA::Station> to the departure stations of this result
+
+=cut
 sub add_departure_station {
     my $self = shift;
     my ( $station ) = pos_validated_list(
@@ -76,12 +93,41 @@ sub add_departure_station {
     return;
 }
 
+=head2 get_departure_station
+
+Returns a L<WWW::EFA::Station> if found, else undef
+
+=head3 Params
+
+=over 4
+
+=item I<$station_id> (integer)
+
+=back
+
+=cut
 sub get_departure_station {
     my $self        = shift;
-    my $station_id  = shift;
+    my ( $station_id ) = pos_validated_list(
+        \@_,
+        { isa => 'Int' },
+      );
     return $self->departure_stations->{ $station_id };
 }
 
+=head2 add_line
+
+=head3 Params
+
+=over 4
+
+=item L<WWW::EFA::Line>
+
+=back
+
+Add a single L<WWW::EFA::Line> to this result
+
+=cut
 sub add_line {
     my $self = shift;
     my ( $line ) = pos_validated_list(
@@ -96,12 +142,38 @@ sub add_line {
     return;
 }
 
+=head2 get_line
+
+Returns a L<WWW::EFA::line> from this result by its id
+
+=head3 Params
+
+=over 4
+
+=item I<$integer>
+
+=back
+
+=cut
 sub get_line {
     my $self    = shift;
     my $line_id = shift;
     return $self->lines->{ $line_id };
 }
 
+=head2 add_departure
+
+Add a L<WWW::EFA::Departure> to this result
+
+=head3 Params
+
+=over 4
+
+=item L<WWW::EFA::Departure>
+
+=back
+
+=cut
 sub add_departure {
     my $self = shift;
     my ( $departure ) = pos_validated_list(
@@ -126,4 +198,12 @@ sub add_departure {
 }
 
 1;
+=head1 COPYRIGHT
+
+Copyright 2011, Robin Clarke, Munich, Germany
+
+=head1 AUTHOR
+
+Robin Clarke <perl@robinclarke.net>
+
 

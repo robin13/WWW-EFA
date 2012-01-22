@@ -1,6 +1,6 @@
 package WWW::EFA::Location;
 use Moose;
-with 'WWW::EFA::Roles::Printable'; # provides to_string
+with 'WWW::EFA::Roles::Printable'; # provides string
 
 =head1 NAME
 
@@ -14,7 +14,6 @@ Version 0.01
 
 our $VERSION = '0.01';
 
-
 =head1 SYNOPSIS
 
 Location object acquired through an EFA interface
@@ -26,8 +25,9 @@ Location object acquired through an EFA interface
 
 =head1 ATTRIBUTES
 
-=cut
 # TODO: RCL 2011-11-06 Document attributes
+
+=cut
 
 has 'id'                => ( is => 'rw', isa => 'Int',  );
 has 'poi_id'            => ( is => 'rw', isa => 'Int',  );

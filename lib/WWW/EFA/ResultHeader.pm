@@ -17,12 +17,18 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-TODO: RCL 2011-11-10 
+ResultHeader object acquired through an EFA interface
+
+    use WWW::EFA::ResultHeader;
+
+    my $header = WWW::EFA::ResultHeader->new();
+    ...
 
 =head1 ATTRIBUTES
 
-=cut
 # TODO: RCL 2011-11-06 Document attributes
+
+=cut
 
 has 'version'       => ( is => 'ro', isa => 'Str',          );
 has 'language'      => ( is => 'ro', isa => 'Str',          );
@@ -32,7 +38,6 @@ has 'server_id'     => ( is => 'ro', isa => 'Str',          );
 has 'server_time'   => ( is => 'ro', isa => 'Class::Date',  );
 
 1;
-
 
 =head1 COPYRIGHT
 

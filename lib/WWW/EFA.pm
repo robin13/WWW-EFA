@@ -39,11 +39,11 @@ WWW::EFA - Interface to EFA sites (Elektronische Fahrplanauskunft)
 
 =head1 VERSION
 
-    Version 0.01
+    Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
@@ -56,6 +56,8 @@ Get location of public transport stops and connection details.
     ...
 
 =head1 PARAMS/ACCESSORS
+
+TODO: RCL 2012-01-22 document params/accessors
 
 =cut
 
@@ -138,10 +140,13 @@ has 'last_request_time' => (
 
 Queries the XSLT_DM_REQUEST method from the EFA server.
 
-Params:
+=head3 Params
 
-location    =>  A WWW::EFA::Location object which must have the id (stopID) defined
+=over 4
 
+=item location => L<WWW::EFA::Location> (which must have the id (stopID) defined)
+
+=back
 
 =cut
 sub departures {
@@ -229,18 +234,32 @@ sub departures {
 
 Queries the XSLT_TRIP_REQUEST2 method from the EFA server.
 
-Required Params:
+=head3 Required Params:
 
-  from         => WWW::EFA::Location object
-  to           => WWW::EFA::Location object
-  date         => Class::Date object of the time to be searched
+=over 4
 
-Optional Params:
+=item I<from> => L<WWW::EFA::Location>
 
-  via          => WWW::EFA::Location object. Default undef
-  is_departure => set to true if the date is the departure time, otherwise arrival time. Default 0
-  language     => Language to return results in. Default 'de'
-  walk_speed   => Override default walk speed. TODO: RCL 2011-08-23 What is walk speed? km/h? m/s?
+=item I<to> => L<WWW::EFA::Location>
+
+=item I<date> => L<Class::Date> of the time to be searched
+
+=back
+
+=head3 Optional Params:
+
+=over 4
+
+=item I<via> => L<WWW::EFA::Location> (default undef)
+
+=item I<is_departure> => $boolean (set to true if the date is the departure time)
+  
+=item I<language> => $string (language to return results in. Default 'de')
+
+=item I<walk_speed> => $number (override default walk speed.)
+    TODO: RCL 2011-08-23 What is walk speed? km/h? m/s?
+
+=back
 
 =cut
 sub trips {
@@ -387,8 +406,11 @@ Queries the XML_STOPFINDER_REQUEST method from the EFA server.
 
 Used to get an address from coordinates
 
-Usage:
-  
+Returns an ArrayRef of L<WWW::EFA::Location>.
+
+=head3 Usage
+
+
 my $location = WWW::EFA::Location->new(
     coordinates => WWW::EFA::Coordinates->new(
         lat => 12.12345,
@@ -400,11 +422,13 @@ my( $address ) = $efa->stop_finder(
     );
 
 
-Params:
+=head3 Params
 
-  location  => L<WWW::EFA::Location> object
+=over 4
 
-Returns an ArrayRef of L<WWW::EFA::Location> objects.
+=item location  => L<WWW::EFA::Location>
+
+=back
 
 =cut
 sub stop_finder {
@@ -470,14 +494,20 @@ sub stop_finder {
 =head2 coord_request
 
 Queries the XML_COORD_REQUEST method from the EFA server.
+Returns an array reference of L<WWW::EFA::Location> objects.
 
-Params:
 
-  location     =>  A WWW::EFA::Location object with either id or lon/lat defined
-  max_results  =>  Maximum number of results to return
-  max_distance => Maximum distance (meters) around the given location to search
+=head3 Params
 
-Returns an array reference of WWW::EFA::Location objects.
+=over 4
+
+=item I<location> =>  L<WWW::EFA::Location> (with either id or lon/lat defined)
+
+=item I<max_results> => $integer (maximum number of results to return)
+
+=item I<max_distance> => $integer (maximum distance (meters) around the given location to search)
+
+=back
 
 =cut
 sub coord_request {
@@ -519,9 +549,23 @@ sub coord_request {
 
 =head2 complete_location_from_anything
 
-Give me an id, lat/lon, latitude/longitude, or location, and I will make sure it is complete
-with id and coordinates
-Handy because in some contexts we don't have a complete location object...
+Give any valid combination from which a Location object may be completed (id, lat/lon, latitude/longitude, or location) and it will return a complete L<WWW::EFA::Location>.
+
+This can be handy in some contexts when you don't have a complete location object...
+
+=head3 Params
+
+=over 4
+
+=item I<id> => $integer
+
+=item I<lat> / I<latitude> => $number
+
+=item I<lon> / I<longitude> => $number
+
+=item I<location> => L<WWW::EFA::Location>
+
+=back
 
 =cut
 sub complete_location_from_anything {
@@ -582,7 +626,7 @@ sub complete_location_from_anything {
 #  * the http request to the EFA server
 #  * parse the XML content
 #  * error handling if any of the above fail or are unexpected
-# Returns a perl data structure as parsed by XML::Simple from the XML
+# Returns the XML as got from the EFA server
 sub _get_xml {
     my ( $self, %params ) = validated_hash(
         \@_,
@@ -638,6 +682,11 @@ sub _get_xml {
     return $xml;
 }
 
+# Private method to wrap around:
+#  * get_xml
+#  * make L<XML::LibXML> parser
+#  * move to the /itdRequest element in the document
+# Returns a L<XML::LibXML> document
 sub _get_doc {
     my( $self, %params ) = validated_hash(
         \@_,
@@ -655,30 +704,6 @@ sub _get_doc {
 }
 
 
-# Create a L<WWW::EFA::ResultHeader> object from an XML element like this:
-# <itdRequest version="9.16.27.42" language="de" lengthUnit="METER" sessionID="MVV1_4147296033"
-# client="libwww-perl/6.03" clientIP="192.168.0.190" serverID="MVV1_" virtDir="mobile" 
-# now="2011-11-10T15:16:22" nowWD="5">
-sub header_from_result {
-    my $self = shift;
-    my $elem = shift;
-
-    my( $req_elem ) = $elem->findnodes( '/itdRequest' );
-    if( not $req_elem ){
-        croak( "Could not find itdRequest element" );
-    }
-
-    my $header = WWW::EFA::ResultHeader->new(
-        version     => $req_elem->getAttribute( 'version' ),
-        language    => $req_elem->getAttribute( 'language' ),
-        server_time => Class::Date->new( $req_elem->getAttribute( 'now' ) ),
-        server_id   => $req_elem->getAttribute( 'serverID' ),
-        length_unit => $req_elem->getAttribute( 'lengthUnit' ),
-        session_id  => $req_elem->getAttribute( 'sessionID' ),
-        );
-    return $header;
-}
-
 
 =head1 AUTHOR
 
@@ -691,8 +716,6 @@ the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WWW-EFA>. 
 automatically be notified of progress on your bug as I make changes.
 
 
-
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
@@ -703,6 +726,10 @@ perldoc WWW::EFA
 You can also look for information at:
 
 =over 4
+
+=item * Github - this is my preferred path to receive input on the project!
+
+L<https://github.com/robin13/WWW-EFA>
 
 =item * RT: CPAN's request tracker (report bugs here)
 
