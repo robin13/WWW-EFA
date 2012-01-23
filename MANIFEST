@@ -1,8 +1,5 @@
 Changes
 ignore.txt
-lib
-lib/WWW
-lib/WWW/EFA
 lib/WWW/EFA/ConnectionsResult.pm
 lib/WWW/EFA/CoordinatesFactory.pm
 lib/WWW/EFA/Coordinates.pm
@@ -18,11 +15,9 @@ lib/WWW/EFA/Location.pm
 lib/WWW/EFA/PartialRoute.pm
 lib/WWW/EFA/PlaceFactory.pm
 lib/WWW/EFA/Place.pm
-lib/WWW/EFA/Provider
 lib/WWW/EFA/Provider/MVV.pm
 lib/WWW/EFA/Request.pm
 lib/WWW/EFA/ResultHeader.pm
-lib/WWW/EFA/Roles
 lib/WWW/EFA/Roles/Printable.pm
 lib/WWW/EFA/RouteFactory.pm
 lib/WWW/EFA/Route.pm
@@ -32,7 +27,6 @@ lib/WWW/EFA.pm
 Makefile.PL
 MANIFEST
 README
-t
 t/00-load.t
 t/boilerplate.t
 t/manifest.t
