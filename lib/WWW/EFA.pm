@@ -39,11 +39,11 @@ WWW::EFA - Interface to EFA sites (Elektronische Fahrplanauskunft)
 
 =head1 VERSION
 
-    Version 0.02
+    Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 =head1 SYNOPSIS
@@ -234,7 +234,7 @@ sub departures {
 
 Queries the XSLT_TRIP_REQUEST2 method from the EFA server.
 
-=head3 Required Params:
+=head3 Required Params
 
 =over 4
 
@@ -246,7 +246,7 @@ Queries the XSLT_TRIP_REQUEST2 method from the EFA server.
 
 =back
 
-=head3 Optional Params:
+=head3 Optional Params
 
 =over 4
 
@@ -410,13 +410,13 @@ Returns an ArrayRef of L<WWW::EFA::Location>.
 
 =head3 Usage
 
-
+  
 my $location = WWW::EFA::Location->new(
     coordinates => WWW::EFA::Coordinates->new(
         lat => 12.12345,
         lon => 48.12345,
     );
-
+  
 my( $address ) = $efa->stop_finder(
     location    => $location,
     );
@@ -501,11 +501,14 @@ Returns an array reference of L<WWW::EFA::Location> objects.
 
 =over 4
 
-=item I<location> =>  L<WWW::EFA::Location> (with either id or lon/lat defined)
+=item I<location> => L<WWW::EFA::Location>
+Must have either id or lon/lat defined
 
-=item I<max_results> => $integer (maximum number of results to return)
+=item I<max_results> => $integer
+Maximum number of results to return
 
-=item I<max_distance> => $integer (maximum distance (meters) around the given location to search)
+=item I<max_distance> => $integer
+Maximum distance (meters) around the given location to search
 
 =back
 
